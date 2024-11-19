@@ -41,7 +41,7 @@ const LoginForm = () => {
     if (validate()) {
       setIsLoading(true);
       try {
-        const response = await axios.post('http://ocr.goodwish.com.np/api/login/', formData);
+        const response = await axios.post('https://ocr.goodwish.com.np/api/login/', formData);
         console.log("Login successful:", response.data);
         if (response.status=202) {
           localStorage.setItem('token', response.data.token)
