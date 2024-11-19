@@ -12,8 +12,8 @@ const Navbar = () => {
   const token = localStorage.getItem('token');
   const email = localStorage.getItem('email');
   const name = localStorage.getItem('name');
-  const photo = localStorage.getItem('photo');
-
+  const photo = localStorage.getItem('photo') || ''; // Default to empty string if no photo
+  
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
@@ -36,6 +36,8 @@ const Navbar = () => {
     };
   }, []);
 
+  const [login, setLogin] = useState(token);
+
   return (
     <motion.nav
       initial={{ opacity: 0, y: -80 }}
@@ -55,28 +57,41 @@ const Navbar = () => {
           transition={{ duration: 0.3 }}
         />
       </NavLink>
+      
+      {login ? (
+        <div className="flex items-center gap-4">
+          <div onClick={() => setIsLogoutToggle(!isLogoutToggle)} className="relative flex flex-col items-center cursor-pointer">
+            <img
+              className="object-cover w-12 h-12 rounded-full" // Make the profile picture larger for mobile
+              src={photo.startsWith("http") ? photo : `https://ocr.goodwish.com.np${photo}` || "https://via.placeholder.com/40"}
+              alt="User"
+            />
+            <h4 className="text-sm text-gray-900">{name}</h4>
+            {isLogoutToggle && (
+              <div ref={logoutRef} className="absolute z-10 w-32 p-2 mt-2 text-center text-gray-800 bg-white rounded-md shadow-lg top-full">
+                <button
+                  onClick={logOut}
+                  className="w-full py-2 font-semibold text-gray-700 rounded-md hover:bg-gray-200"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
 
-      <div className="flex items-center gap-4">
-        <div onClick={() => setIsLogoutToggle(!isLogoutToggle)} className="relative flex flex-col items-center cursor-pointer">
-          <img className="object-cover w-10 h-10 rounded-full" src={`https://ocr.goodwish.com.np${photo}`} alt="User" />
-          <h4 className="text-sm text-gray-900">{name}</h4>
-          {isLogoutToggle && (
-            <div ref={logoutRef} className="absolute z-10 w-32 p-2 mt-2 text-center text-gray-800 bg-white rounded-md shadow-lg top-full">
-              <button
-                onClick={logOut}
-                className="w-full py-2 font-semibold text-gray-700 rounded-md hover:bg-gray-200"
-              >
-                Logout
-              </button>
-            </div>
-          )}
+          {/* Hamburger Icon for Mobile */}
+          <div className="cursor-pointer md:hidden" onClick={toggleMenu}>
+            {isOpen ? <FaTimes className="text-2xl" /> : <FaBars className="text-2xl" />}
+          </div>
         </div>
-
-        {/* Hamburger Icon for Mobile */}
-        <div className="cursor-pointer md:hidden" onClick={toggleMenu}>
-          {isOpen ? <FaTimes className="text-2xl" /> : <FaBars className="text-2xl" />}
-        </div>
-      </div>
+      ) : (
+        <NavLink 
+          to="/auth" 
+          className="px-4 py-2 text-white transition-all duration-300 transform bg-blue-500 rounded-lg shadow-md hover:bg-blue-700 hover:scale-105"
+        >
+          Login
+        </NavLink>
+      )}
 
       {/* Navigation Links */}
       <AnimatePresence>
@@ -94,72 +109,28 @@ const Navbar = () => {
               </div>
             )}
 
-            <NavLink to="/" onClick={closeMenu} className="nav-link md:text-white">
-              <motion.div
-                whileHover={{ scale: 1.1, color: '#FFD700' }}
-                className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md hover:bg-indigo-600 md:hover:bg-transparent"
-              >
-                <FaHome className="text-xl" />
-                <span>HomePage</span>
-              </motion.div>
-            </NavLink>
-
-            <NavLink to="/table-extension" onClick={closeMenu} className="nav-link md:text-white">
-              <motion.div
-                whileHover={{ scale: 1.1, color: '#FFD700' }}
-                className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md hover:bg-indigo-600 md:hover:bg-transparent"
-              >
-                <FaTable className="text-xl" />
-                <span>Table Extraction</span>
-              </motion.div>
-            </NavLink>
-
-            <NavLink to="/pdf-to-doc" onClick={closeMenu} className="nav-link md:text-white">
-              <motion.div
-                whileHover={{ scale: 1.1, color: '#FFD700' }}
-                className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md hover:bg-indigo-600 md:hover:bg-transparent"
-              >
-                <FaFileAlt className="text-xl" />
-                <span>PDF to DOC</span>
-              </motion.div>
-            </NavLink>
-
-            <NavLink to="/img-to-doc" onClick={closeMenu} className="nav-link md:text-white">
-              <motion.div
-                whileHover={{ scale: 1.1, color: '#FFD700' }}
-                className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md hover:bg-indigo-600 md:hover:bg-transparent"
-              >
-                <FaFileAlt className="text-xl" />
-                <span>Image to DOC</span>
-              </motion.div>
-            </NavLink>
-
-            <NavLink to="/pdf-to-img" onClick={closeMenu} className="nav-link md:text-white">
-              <motion.div
-                whileHover={{ scale: 1.1, color: '#FFD700' }}
-                className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md hover:bg-indigo-600 md:hover:bg-transparent"
-              >
-                <FaImage className="text-xl" />
-                <span>PDF to Image</span>
-              </motion.div>
-            </NavLink>
-
-            <NavLink to="/ocr" onClick={closeMenu} className="nav-link md:text-white">
-              <motion.div
-                whileHover={{ scale: 1.1, color: '#FFD700' }}
-                className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md hover:bg-indigo-600 md:hover:bg-transparent"
-              >
-                <FaImage className="text-xl" />
-                <span>OCR</span>
-              </motion.div>
-            </NavLink>
+            {/* Mobile Navigation Links */}
+            {['HomePage', 'Table Extraction', 'PDF to DOC', 'Image to DOC', 'PDF to Image', 'OCR'].map((text, index) => (
+              <NavLink key={index} to={`/${text.toLowerCase().replace(' ', '-')}`} onClick={closeMenu} className="nav-link md:text-white">
+                <motion.div
+                  whileHover={{ scale: 1.1, color: '#FFD700' }}
+                  className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md hover:bg-indigo-600 md:hover:bg-transparent"
+                >
+                  {index === 0 && <FaHome className="text-xl" />}
+                  {index === 1 && <FaTable className="text-xl" />}
+                  {index === 2 && <FaFileAlt className="text-xl" />}
+                  {index === 3 && <FaFileAlt className="text-xl" />}
+                  {index === 4 && <FaImage className="text-xl" />}
+                  {index === 5 && <FaImage className="text-xl" />}
+                  <span>{text}</span>
+                </motion.div>
+              </NavLink>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
     </motion.nav>
   );
 };
-
-
 
 export default Navbar;

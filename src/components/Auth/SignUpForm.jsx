@@ -88,7 +88,7 @@ const SignUpForm = ({ setIsLogin}) => {
       });
 
       try {
-        const response = await axios.post('https://ocr.goodwish.com.np/api/users/', payload, {
+        const response = await axios.post('http://ocr.goodwish.com.np/api/users/', payload, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         alert('User signed up successfully , check the email to confirm');

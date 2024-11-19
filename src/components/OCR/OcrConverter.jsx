@@ -5,10 +5,11 @@ import axios from 'axios';
 
 const OcrConverter = () => {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [extractedText, setExtractedText] = useState([]);
+  const [extractedText, setExtractedText] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
- const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token');
+
   const handleFileChange = (e) => {
     setSelectedImage(e.target.files[0]);
     setError("");
@@ -21,7 +22,7 @@ const OcrConverter = () => {
     }
 
     setIsLoading(true);
-    setExtractedText([]);
+    setExtractedText(null);
 
     try {
       const formData = new FormData();
@@ -38,7 +39,6 @@ const OcrConverter = () => {
         }
       );
 
-      // Set extracted text from the response
       const textData = response.data.extracted_text[0];
       setExtractedText(textData);
     } catch (error) {
@@ -47,6 +47,27 @@ const OcrConverter = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleDownload = () => {
+    if (!extractedText) return;
+
+    const textContent = [
+      "Extracted Lines:\n",
+      ...(extractedText.lines?.map((line) => line.text) || []),
+      "\n\nExtracted Paragraphs:\n",
+      ...(extractedText.paragraphs?.map((paragraph) => paragraph.text) || [])
+    ].join("\n");
+
+    const blob = new Blob([textContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'extracted_text.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -108,6 +129,17 @@ const OcrConverter = () => {
               {paragraph.text}
             </Typography>
           ))}
+
+          {extractedText && (
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ mt: 2 }}
+              onClick={handleDownload}
+            >
+              Download Text
+            </Button>
+          )}
         </Box>
       )}
     </Paper>

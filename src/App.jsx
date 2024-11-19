@@ -9,20 +9,22 @@ import Footer from './components/Footer'
 
 const App = () => {
   const token = localStorage.getItem('token')
-const [login,setlogin]=useState(token)
+  
+const [login,setlogin]=useState(token);
   return (
     <>
    
-      {login ?
+      {/* {login ? */}
         <>
           <Navbar />
-          <div className='my-10'>
+          <div className=''>
 
           <Outlet />
           </div>
-          <div className='hidden fixed bottom-0 bg-gradient-to-r from-indigo-700 via-purple-800 to-blue-800 w-full z-40 md:flex justify-center'><Footer/> </div>
-          </>:<AuthDashboard/>
-        }
+          <div className='fixed bottom-0 z-40 justify-center hidden w-full bg-gradient-to-r from-indigo-700 via-purple-800 to-blue-800 md:flex'><Footer/> </div>
+          </>
+        {/* //   :<AuthDashboard/>
+        //  }  */}
       
  
     </>

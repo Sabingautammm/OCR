@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CircularProgress, Button, Typography, Box, Paper } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
 
 const DocumentConverter = () => {
@@ -9,7 +10,8 @@ const DocumentConverter = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [convertedFileUrl, setConvertedFileUrl] = useState(null);
   const [error, setError] = useState("");
- const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token');
+
   const handleFileChange = (e) => {
     setPdfFile(e.target.files[0]);
     setError("");
@@ -49,11 +51,15 @@ const DocumentConverter = () => {
         setError("Document conversion failed or returned empty.");
       }
     } catch (error) {
-      setError("An error occurred while converting the file.");
+      // setError("An error occurred while converting the file.");
       console.error("Conversion error:", error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePreview = () => {
+    window.open(convertedFileUrl, '_blank');
   };
 
   return (
@@ -113,6 +119,17 @@ const DocumentConverter = () => {
           >
             Download Converted Document
           </Button>
+
+          {/* <Button
+            variant="outlined"
+            color="secondary"
+            startIcon={<VisibilityIcon />}
+            onClick={handlePreview}
+            fullWidth
+            sx={{ mt: 1 }}
+          >
+            Preview Converted Document
+          </Button> */}
         </Box>
       )}
     </Paper>
