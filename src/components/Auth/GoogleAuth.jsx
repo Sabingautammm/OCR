@@ -14,7 +14,7 @@ export const GoogleAuth = () => {
     
         if (code) {
             // Exchange code for token at your backend
-            axios.post('https://ocr.goodwish.com.np/auth/google/callback/', { code })
+            axios.post('https://ocr.goodwish.com.np/api/auth/google/callback/', { code })
                 .then(response => {
                     console.log(response.data);
                     const { token,photo,name,email} = response.data;  // Assuming the response contains a 'user' object
