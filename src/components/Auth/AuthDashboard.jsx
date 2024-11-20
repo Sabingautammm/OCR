@@ -53,54 +53,55 @@ const AuthDashboard = () => {
     }, [location.search, navigate]);
 
     return (
-      <div className="relative flex items-center justify-center h-auto pb-10 mt-0 bg-gradient-to-r from-blue-400 to-indigo-500">
-    <div className="absolute inset-0 h-auto bg-center bg-cover bg-slate-200" />
-    <div className="absolute inset-0 h-auto mt-0 bg-black opacity-40 " />
-    <div className={`w-[80vw] md:w-[50vw] lg:w-[40vw] ${!showLogin ? 'mt-10' : 'max-w-2xl'} p-6 h-auto my-5 bg-white rounded-lg shadow-xl relative z-10 backdrop-blur-lg flex flex-col transition-all ease-in-out`}>
-        <h1 className="mb-6 text-3xl font-bold text-center text-gray-800">
-            Welcome to The OCR
-        </h1>
-        <AnimatePresence>
-            {showLogin ? (
-                <motion.div
-                    key="login"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -50 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <Login />
-                </motion.div>
-            ) : (
-                <motion.div
-                    key="signup"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -50 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <Signup setShowLogin={setShowLogin} />
-                </motion.div>
-            )}
-        </AnimatePresence>
-        <div className="mt-6 mb-8 text-center">
-            <button
-                onClick={() => setShowLogin(!showLogin)}
-                className="font-semibold text-blue-600 underline transition-colors hover:text-blue-400"
-            >
-                {showLogin ? "Already have an account? Log In"  :  "Don't have an account? Sign Up"}
-            </button>
-            <h3 className="mt-4 text-lg text-white">----or----</h3>
-            <button
-                onClick={signInWithGoogle}
-                className="px-8 py-3 mt-0 text-white transition-all duration-300 ease-in-out bg-red-500 rounded-lg shadow-md hover:scale-105"
-            >
-                Continue with Google <FontAwesomeIcon icon={faGoogle} className="ml-2" />
-            </button>
-        </div>
-    </div>
-</div>
+        <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-400 to-indigo-500">
+            <div className="absolute inset-0 bg-center bg-cover bg-slate-200 opacity-60" />
+            <div className="absolute inset-0 bg-black opacity-40" />
+            <div className="w-full sm:w-[90vw] md:w-[80vw] lg:w-[50vw] xl:w-[40vw] p-6 bg-white rounded-lg shadow-xl relative z-10 backdrop-blur-lg flex flex-col">
+                <h1 className="mb-6 text-3xl font-bold text-center text-gray-800 sm:text-4xl">Welcome to The OCR</h1>
+                <AnimatePresence>
+                    {showLogin ? (
+                        <motion.div
+                            key="login"
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -50 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <Login />
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="signup"
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -50 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <Signup setShowLogin={setShowLogin} />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
+                <div className="mt-6 text-center">
+                    <button
+                        onClick={() => setShowLogin(!showLogin)}
+                        className="font-semibold text-blue-600 underline transition-colors hover:text-blue-400"
+                    >
+                        {showLogin ? "Already have an account? Log In" : "Don't have an account? Sign Up"}
+                    </button>
+
+                    <h3 className="mt-4 text-lg text-white">----or----</h3>
+
+                    <button
+                        onClick={signInWithGoogle}
+                        className="px-8 py-3 mt-4 text-lg text-white transition-all duration-300 ease-in-out bg-red-500 rounded-lg shadow-md hover:scale-105"
+                    >
+                        Continue with Google
+                        <FontAwesomeIcon icon={faGoogle} className="ml-2" />
+                    </button>
+                </div>
+            </div>
+        </div>
     );
 };
 

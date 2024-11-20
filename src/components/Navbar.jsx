@@ -62,7 +62,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           <div onClick={() => setIsLogoutToggle(!isLogoutToggle)} className="relative flex flex-col items-center cursor-pointer">
             <img
-              className="object-cover w-12 h-12 rounded-full" // Make the profile picture larger for mobile
+              className="object-cover w-12 h-12 rounded-full"
               src={photo.startsWith("http") ? photo : `https://ocr.goodwish.com.np${photo}` || "https://via.placeholder.com/40"}
               alt="User"
             />
@@ -94,41 +94,55 @@ const Navbar = () => {
       )}
 
       {/* Navigation Links */}
-      <AnimatePresence>
-        {(isOpen || window.innerWidth >= 768) && (
-          <motion.div
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -100, opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="absolute left-0 flex-col w-full px-4 py-4 shadow-lg md:flex-row md:hidden md:space-x-8 md:static top-16 md:top-0 md:w-auto bg-gradient-to-r from-indigo-700 via-purple-800 to-blue-800 md:bg-transparent rounded-xl md:rounded-none md:shadow-none md:p-0"
-          >
-            {isOpen && (
-              <div className="flex justify-end p-2 md:hidden">
-                <FaTimes className="text-white cursor-pointer" onClick={closeMenu} />
-              </div>
-            )}
+      {/* Navigation Links */}
+<AnimatePresence>
+  {login && (isOpen || window.innerWidth >= 768) && (
+    <motion.div
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: -100, opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="absolute left-0 flex-col w-full px-4 py-4 shadow-lg md:flex-row md:hidden md:space-x-8 md:static top-16 md:top-0 md:w-auto bg-gradient-to-r from-indigo-700 via-purple-800 to-blue-800 md:bg-transparent rounded-xl md:rounded-none md:shadow-none md:p-0"
+    >
+      {isOpen && (
+        <div className="flex justify-end p-2 md:hidden">
+          <FaTimes className="text-white cursor-pointer" onClick={closeMenu} />
+        </div>
+      )}
 
-            {/* Mobile Navigation Links */}
-            {['HomePage', 'Table Extraction', 'PDF to DOC', 'Image to DOC', 'PDF to Image', 'OCR'].map((text, index) => (
-              <NavLink key={index} to={`/${text.toLowerCase().replace(' ', '-')}`} onClick={closeMenu} className="nav-link md:text-white">
-                <motion.div
-                  whileHover={{ scale: 1.1, color: '#FFD700' }}
-                  className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md hover:bg-indigo-600 md:hover:bg-transparent"
-                >
-                  {index === 0 && <FaHome className="text-xl" />}
-                  {index === 1 && <FaTable className="text-xl" />}
-                  {index === 2 && <FaFileAlt className="text-xl" />}
-                  {index === 3 && <FaFileAlt className="text-xl" />}
-                  {index === 4 && <FaImage className="text-xl" />}
-                  {index === 5 && <FaImage className="text-xl" />}
-                  <span>{text}</span>
-                </motion.div>
-              </NavLink>
-            ))}
+      {/* Navigation Links */}
+      {[
+        { text: 'Home', path: '/' },
+        { text: 'Table Extension', path: '/table-extentation' },
+        { text: 'PDF to DOC', path: '/pdf-to-doc' },
+        { text: 'Image to DOC', path: '/img-to-doc' },
+        { text: 'PDF to Image', path: '/pdf-to-img' },
+        { text: 'OCR', path: '/ocr' }
+      ].map(({ text, path }, index) => (
+        <NavLink
+          key={index}
+          to={path}  // Corrected path here
+          onClick={closeMenu}
+          className="nav-link md:text-white"
+        >
+          <motion.div
+            whileHover={{ scale: 1.1, color: '#FFD700' }}
+            className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md hover:bg-indigo-600 md:hover:bg-transparent"
+          >
+            {index === 0 && <FaHome className="text-xl" />}
+            {index === 1 && <FaTable className="text-xl" />}
+            {index === 2 && <FaFileAlt className="text-xl" />}
+            {index === 3 && <FaFileAlt className="text-xl" />}
+            {index === 4 && <FaImage className="text-xl" />}
+            {index === 5 && <FaImage className="text-xl" />}
+            <span>{text}</span>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </NavLink>
+      ))}
+    </motion.div>
+  )}
+</AnimatePresence>
+
     </motion.nav>
   );
 };

@@ -38,7 +38,14 @@ export const GoogleAuth = () => {
     }, [navigate]);
    
 
-    return <div className='flex items-center justify-center w-full h-[800px] text-3xl font-bold text-black bg-slate-300'>Authenticating...</div>;
+    return (
+        <div className='flex items-center justify-center w-full h-[800px] text-3xl font-bold text-black bg-slate-300 
+          sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] 
+          sm:text-xl md:text-2xl lg:text-3xl'>
+          Authenticating...
+        </div>
+      );
+      
 };
 
 export default GoogleAuth;

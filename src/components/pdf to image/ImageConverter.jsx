@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Button, CircularProgress, Typography, Box, Paper, Grid, Dialog, DialogContent, IconButton } from '@mui/material';
+import { Button, CircularProgress, Typography, Box, Paper, Grid, Dialog, DialogContent, IconButton, DialogActions, DialogTitle } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import ImageIcon from '@mui/icons-material/Image';
 import CloseIcon from '@mui/icons-material/Close';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { NavLink } from 'react-router-dom';
 
 const ImageConverter = () => {
   const [pdfFile, setPdfFile] = useState(null);
@@ -12,6 +13,7 @@ const ImageConverter = () => {
   const [convertedImages, setConvertedImages] = useState([]);
   const [error, setError] = useState('');
   const [openPreview, setOpenPreview] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Dialog state for login alert
   const token = localStorage.getItem('token');
 
   const handleFileChange = (e) => {
@@ -21,19 +23,24 @@ const ImageConverter = () => {
   };
 
   const handleConvert = async () => {
+    if (!token) {
+      setIsDialogOpen(true); // Show the login dialog if user is not logged in
+      return;
+    }
+
     if (!pdfFile) {
       setError('Please upload a PDF file to convert.');
       return;
     }
-  
+
     setIsLoading(true);
     setError('');
     setConvertedImages([]);
-  
+
     try {
       const formData = new FormData();
       formData.append('file', pdfFile);
-  
+
       const response = await fetch('https://ocr.goodwish.com.np/api/files/', {
         method: 'POST',
         body: formData,
@@ -41,16 +48,16 @@ const ImageConverter = () => {
           Authorization: `Token ${token}`,
         },
       });
-  
+
       const data = await response.json();
-  
+
       // Check if the server returned an error
       if (data.error) {
         setError(data.error); // Display the error message from the server
         setIsLoading(false);
         return;
       }
-  
+
       const baseUrl = 'https://ocr.goodwish.com.np'; // Replace with your server base URL
       const imageUrls = data.file.pages.map((page) => `${baseUrl}${page.image}`);
       setConvertedImages(imageUrls);
@@ -61,7 +68,6 @@ const ImageConverter = () => {
       setIsLoading(false);
     }
   };
-  
 
   const handlePreview = () => setOpenPreview(true);
   const handleClosePreview = () => setOpenPreview(false);
@@ -98,6 +104,10 @@ const ImageConverter = () => {
     }
   };
 
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false); // Close the login dialog
+  };
+
   return (
     <Paper elevation={3} sx={{ padding: 3, maxWidth: 500, margin: 'auto', textAlign: 'center', marginTop: 10 }}>
       <Typography variant="h5" sx={{ mb: 2 }}>
@@ -116,6 +126,7 @@ const ImageConverter = () => {
           Selected File: {pdfFile.name}
         </Typography>
       )}
+
       {error && (
         <Typography color="error" variant="subtitle2" sx={{ mb: 1 }}>
           {error}
@@ -197,6 +208,30 @@ const ImageConverter = () => {
           </Button>
         </>
       )}
+
+      {/* Dialog for Login */}
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        <DialogTitle style={{ textAlign: 'center', fontWeight: 'bold' }}>
+          Login Required
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="textSecondary" align="center">
+            You need to be logged in to access this feature. Please click the button below to Login.
+          </Typography>
+        </DialogContent>
+        <DialogActions style={{ justifyContent: 'center' }}>
+          <NavLink to='/auth'>
+            <Button
+              color="primary"
+              variant="contained"
+              style={{ borderRadius: '15px', padding: '10px 20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}
+              size="large"
+            >
+              Login
+            </Button>
+          </NavLink>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };

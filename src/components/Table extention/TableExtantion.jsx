@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  TablePagination, Paper, Button, Typography, CircularProgress, Box, Alert
+  TablePagination, Paper, Button, Typography, CircularProgress, Box, Alert,
+  Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText
 } from '@mui/material';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
+import { NavLink } from 'react-router-dom';
 
 const TableExtension = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -15,6 +17,8 @@ const TableExtension = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
+  const [openPreview, setOpenPreview] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State for login dialog
   const token = localStorage.getItem('token');
 
   const handleFileChange = (e) => {
@@ -32,6 +36,11 @@ const TableExtension = () => {
   };
 
   const handleExtractTable = async () => {
+    if (!token) {
+      setIsDialogOpen(true); // Show login dialog if not logged in
+      return;
+    }
+    
     if (!selectedFile) return;
     setLoading(true);
     setError(null);
@@ -57,7 +66,6 @@ const TableExtension = () => {
       const processedTables = allTables.map((tableData) => Object.values(tableData));
       setTableData(processedTables);
     } catch (error) {
-      // Check for server error response and set it in the error state
       const errorMessage = error.response?.data?.error || 'Failed to extract table data. Please try again.';
       setError(errorMessage);
       console.error('Error extracting table:', error);
@@ -65,7 +73,9 @@ const TableExtension = () => {
       setLoading(false);
     }
   };
-  
+
+  const handlePreview = () => setOpenPreview(true);
+  const handleClosePreview = () => setOpenPreview(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -74,6 +84,10 @@ const TableExtension = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false); // Close the login dialog
   };
 
   return (
@@ -143,42 +157,53 @@ const TableExtension = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-
-            {/* <TablePagination
-              component="div"
-              count={table.length - 1}
-              page={page}
-              // onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              // onRowsPerPageChange={handleChangeRowsPerPage}
-              rowsPerPageOptions={[5, 10, 50]}
-            /> */}
           </Box>
         ))
       ) : (
         !loading && (
-          <div>
           <Typography variant="body1" color="textSecondary" sx={{ mt: 2 }}>
             Upload a PDF or image file to extract and preview table data.
           </Typography>
-              {/* <Typography variant="body1" className='text-red-500' sx={{ mt: 0 }}>
-              "Upload a PDF with up to 3 pages that includes a table."
-            </Typography> */}
-            </div>
         )
       )}
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<CloudDownloadIcon />}
-          onClick={handleDownloadExcel}
-          sx={{ backgroundColor: '#4caf50' }}
-        >
-          Download 
-        </Button>
+        {tableData.length > 0 && (
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<CloudDownloadIcon />}
+            onClick={handleDownloadExcel}
+            sx={{ backgroundColor: '#4caf50' }}
+          >
+            Download Excel
+          </Button>
+        )}
       </Box>
+
+      {/* Login Dialog */}
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        <DialogTitle style={{ textAlign: 'center', fontWeight: 'bold' }}>
+          Login Required
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="textSecondary" align="center">
+            You need to be logged in to access this feature. Please click the button below to Login.
+          </Typography>
+        </DialogContent>
+        <DialogActions style={{ justifyContent: 'center' }}>
+          <NavLink to="/auth">
+            <Button
+              color="primary"
+              variant="contained"
+              style={{ borderRadius: '15px', padding: '10px 20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}
+              size="large"
+            >
+              Login
+            </Button>
+          </NavLink>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };

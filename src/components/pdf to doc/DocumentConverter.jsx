@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { CircularProgress, Button, Typography, Box, Paper } from '@mui/material';
+import { CircularProgress, Button, Typography, Box, Paper, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 
 const DocumentConverter = () => {
   const [pdfFile, setPdfFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [convertedFileUrl, setConvertedFileUrl] = useState(null);
   const [error, setError] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Dialog state for login alert
   const token = localStorage.getItem('token');
 
   const handleFileChange = (e) => {
@@ -18,6 +20,11 @@ const DocumentConverter = () => {
   };
 
   const handleConvert = async () => {
+    if (!token) {
+      setIsDialogOpen(true); // Show the login dialog if user is not logged in
+      return;
+    }
+
     if (!pdfFile) {
       setError("Please upload a PDF file to convert.");
       return;
@@ -51,15 +58,14 @@ const DocumentConverter = () => {
         setError("Document conversion failed or returned empty.");
       }
     } catch (error) {
-      // setError("An error occurred while converting the file.");
       console.error("Conversion error:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handlePreview = () => {
-    window.open(convertedFileUrl, '_blank');
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false); // Close the login dialog
   };
 
   return (
@@ -120,18 +126,42 @@ const DocumentConverter = () => {
             Download Converted Document
           </Button>
 
-          {/* <Button
+          <Button
             variant="outlined"
             color="secondary"
             startIcon={<VisibilityIcon />}
-            onClick={handlePreview}
+            onClick={() => window.open(convertedFileUrl, '_blank')}
             fullWidth
             sx={{ mt: 1 }}
           >
             Preview Converted Document
-          </Button> */}
+          </Button>
         </Box>
       )}
+
+      {/* Dialog for Login */}
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        <DialogTitle style={{ textAlign: 'center', fontWeight: 'bold' }}>
+          Login Required
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="textSecondary" align="center">
+            You need to be logged in to access this feature. Please click the button below to Login.
+          </Typography>
+        </DialogContent>
+        <DialogActions style={{ justifyContent: 'center' }}>
+          <NavLink to='/auth'>
+            <Button
+              color="primary"
+              variant="contained"
+              style={{ borderRadius: '15px', padding: '10px 20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}
+              size="large"
+            >
+              Login
+            </Button>
+          </NavLink>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };

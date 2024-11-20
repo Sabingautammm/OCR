@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
-import { CircularProgress, Button, Typography, Box, Paper } from '@mui/material';
+import { CircularProgress, Button, Typography, Box, Paper, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 
 const ImgDocConverter = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [convertedFileUrl, setConvertedFileUrl] = useState(null);
   const [error, setError] = useState("");
-  const token = localStorage.getItem('token')
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Dialog state for login
+  const token = localStorage.getItem('token');
+  
   const handleFileChange = (e) => {
     setSelectedImage(e.target.files[0]);
     setError("");
   };
 
   const handleConvert = async () => {
+    if (!token) {
+      setIsDialogOpen(true); // Show the dialog if user is not logged in
+      return;
+    }
+
     if (!selectedImage) {
       setError("Please upload an image to convert.");
       return;
@@ -48,6 +56,10 @@ const ImgDocConverter = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false); // Close the dialog
   };
 
   return (
@@ -109,6 +121,31 @@ const ImgDocConverter = () => {
           </Button>
         </Box>
       )}
+
+      {/* Dialog for Login */}
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        <DialogTitle style={{ textAlign: 'center', fontWeight: 'bold' }}>
+          Login Required
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="textSecondary" align="center">
+            You need to be logged in to access this feature. Please click the button below to Login.
+          </Typography>
+        </DialogContent>
+        <DialogActions style={{ justifyContent: 'center' }}>
+          <NavLink to='/auth'>
+            <Button
+              color="primary"
+              variant="contained"
+              style={{ borderRadius: '15px', padding: '10px 20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}
+              size="large"
+            >
+              Login
+            </Button>
+          </NavLink>
+        </DialogActions>
+      </Dialog>
+
     </Paper>
   );
 };
