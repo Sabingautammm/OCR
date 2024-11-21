@@ -91,7 +91,7 @@ const TableExtension = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ padding: 3, maxWidth: 600, margin: 'auto', textAlign: 'center', marginTop: 10 }}>
+    <Paper elevation={3} sx={{ padding: 3, maxWidth: 600, margin: 'auto', textAlign: 'center', marginTop: 10,marginBottom:10 }}>
       <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
         Table Extractor (PDF or Image)
       </Typography>

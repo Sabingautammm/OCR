@@ -69,7 +69,7 @@ const DocumentConverter = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ padding: 3, maxWidth: 500, margin: 'auto', textAlign: 'center', marginTop: 10 }}>
+    <Paper elevation={3} sx={{ padding: 3, maxWidth: 500, margin: 'auto', textAlign: 'center', marginTop: 10 ,marginBottom:10}}>
       <Typography variant="h5" sx={{ mb: 2 }}>PDF to Document Converter</Typography>
 
       <Box sx={{ mb: 2 }}>
@@ -126,16 +126,7 @@ const DocumentConverter = () => {
             Download Converted Document
           </Button>
 
-          <Button
-            variant="outlined"
-            color="secondary"
-            startIcon={<VisibilityIcon />}
-            onClick={() => window.open(convertedFileUrl, '_blank')}
-            fullWidth
-            sx={{ mt: 1 }}
-          >
-            Preview Converted Document
-          </Button>
+        
         </Box>
       )}
 
