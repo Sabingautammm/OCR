@@ -11,7 +11,7 @@ const features = [
     title: 'Table Extraction',
     description: 'Extract structured data from tables in PDFs with precision.',
     animationDelay: 0.1,
-    link: "/table-extentation",
+    link: "/table-extraction",
     photo: table,
   },
   {

@@ -81,7 +81,7 @@ const Navbar = () => {
 
           {/* Hamburger Icon for Mobile */}
           <div className="cursor-pointer md:hidden" onClick={toggleMenu}>
-            {isOpen ? <FaTimes className="text-2xl" /> : <FaBars className="text-2xl" />}
+            {isOpen ?  <FaBars className="text-2xl" /> : <FaBars className="text-2xl" />}
           </div>
         </div>
       ) : (
@@ -113,7 +113,7 @@ const Navbar = () => {
       {/* Navigation Links */}
       {[
         { text: 'Home', path: '/' },
-        { text: 'Table Extension', path: '/table-extentation' },
+        { text: 'Table Extraction', path: '/table-extraction' },
         { text: 'PDF to DOC', path: '/pdf-to-doc' },
         { text: 'Image to DOC', path: '/img-to-doc' },
         { text: 'PDF to Image', path: '/pdf-to-img' },

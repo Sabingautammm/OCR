@@ -23,7 +23,7 @@ function Main() {
       path: '/',
       children: [
         { path: '/', element: <HomePage /> },
-        { path: '/table-extentation', element: <TableExtantion /> },
+        { path: '/table-extraction', element: <TableExtantion /> },
         { path: '/pdf-to-doc', element: <DocumentConverter /> },
         { path: '/pdf-to-img', element: <ImageConverter /> },
         { path: '/img-to-doc', element: <ImgDocConverter /> },

@@ -31,7 +31,7 @@ const Footer = () => {
               </motion.div>
             </NavLink>
 
-            <NavLink to="/table-extentation"  className="nav-link md:text-white">
+            <NavLink to="/table-extraction"  className="nav-link md:text-white">
               <motion.div
                 whileHover={{ scale: 1.1, color: '#FFD700' }}
                 className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md hover:bg-indigo-600 md:hover:bg-transparent"
