@@ -38,7 +38,7 @@ const OcrConverter = () => {
       formData.append("image", selectedImage);
 
       const response = await axios.post(
-        'https://ocr.goodwish.com.np/api/image-to-text/',
+        'https://ocr.goodwish.com.np:8000/api/image-to-text/',
         formData,
         {
           headers: {
@@ -84,7 +84,7 @@ const OcrConverter = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ padding: 3, maxWidth: 500, margin: 'auto', textAlign: 'center', marginTop: 10 }}>
+    <Paper elevation={3} sx={{ padding: 3, maxWidth: 500, margin: 'auto', textAlign: 'center', marginTop: 10, marginBottom:10 }}>
       <Typography variant="h5" sx={{ mb: 2 }}>Image to Text Converter</Typography>
 
       <Box sx={{ mb: 2 }}>

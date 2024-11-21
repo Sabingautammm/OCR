@@ -43,7 +43,7 @@ const Navbar = () => {
       initial={{ opacity: 0, y: -80 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, type: 'spring' }}
-      className="relative z-20 flex items-center justify-between w-full px-6 py-2 text-white shadow-lg bg-gradient-to-r from-neutral-100 via-neutral-200 to-blue-300"
+      className="relative z-20 flex md:h-[80px] items-center justify-between w-full px-6 py-2 text-white shadow-lg bg-gradient-to-r from-neutral-100 via-neutral-200 to-blue-300"
     >
       {/* Logo / Brand */}
       <NavLink to="/" className="flex items-center space-x-3">

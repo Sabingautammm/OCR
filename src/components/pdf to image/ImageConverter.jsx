@@ -58,7 +58,7 @@ const ImageConverter = () => {
         return;
       }
 
-      const baseUrl = 'https://ocr.goodwish.com.np'; // Replace with your server base URL
+      const baseUrl = 'https://ocr.goodwish.com.np/'; // Replace with your server base URL
       const imageUrls = data.file.pages.map((page) => `${baseUrl}${page.image}`);
       setConvertedImages(imageUrls);
     } catch (error) {
