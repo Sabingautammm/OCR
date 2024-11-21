@@ -59,31 +59,34 @@ const Navbar = () => {
       </NavLink>
       
       {login ? (
-        <div className="flex items-center gap-4">
-          <div onClick={() => setIsLogoutToggle(!isLogoutToggle)} className="relative flex flex-col items-center cursor-pointer">
-            <img
-              className="object-cover w-12 h-12 rounded-full"
-              src={photo.startsWith("http") ? photo : `https://ocr.goodwish.com.np${photo}` || "https://via.placeholder.com/40"}
-              alt="User"
-            />
-            <h4 className="text-sm text-gray-900">{name}</h4>
-            {isLogoutToggle && (
-              <div ref={logoutRef} className="absolute z-10 w-32 p-2 mt-2 text-center text-gray-800 bg-white rounded-md shadow-lg top-full">
-                <button
-                  onClick={logOut}
-                  className="w-full py-2 font-semibold text-gray-700 rounded-md hover:bg-gray-200"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+ <div className="relative flex items-center gap-4">
+ <div onClick={() => setIsLogoutToggle(!isLogoutToggle)} className="relative flex flex-col items-center cursor-pointer">
+   <img
+     className="object-cover w-12 h-12 rounded-full"
+     src={photo.startsWith("http") ? photo : `https://ocr.goodwish.com.np${photo}` || "https://via.placeholder.com/40"}
+     alt="User"
+   />
+   <h4 className="text-sm text-gray-900">{name}</h4>
+   {isLogoutToggle && (
+     <div ref={logoutRef} className="absolute z-10 w-32 p-2 mt-2 text-center text-gray-800 bg-white rounded-md shadow-lg top-full">
+       <button
+         onClick={logOut}
+         className="w-full py-2 font-semibold text-gray-700 rounded-md hover:bg-gray-200"
+       >
+         Logout
+       </button>
+     </div>
+   )}
+ </div>
 
-          {/* Hamburger Icon for Mobile */}
-          <div className="cursor-pointer md:hidden" onClick={toggleMenu}>
-            {isOpen ?  <FaBars className="text-2xl" /> : <FaBars className="text-2xl" />}
-          </div>
-        </div>
+ {/* Hide the toggle button when the menu is open */}
+ {!isOpen && (
+   <div className="cursor-pointer md:hidden" onClick={toggleMenu}>
+     <FaBars className="text-2xl" />
+   </div>
+ )}
+</div>
+
       ) : (
         <NavLink 
           to="/auth" 
