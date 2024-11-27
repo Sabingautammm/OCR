@@ -25,7 +25,7 @@ const [login,setlogin]=useState(token);
           <Outlet />
           </div>
         
-          <div className='fixed bottom-0 z-40 justify-center hidden w-full bg-gradient-to-r from-indigo-700 via-purple-800 to-blue-800 md:flex'><Footer/> </div>
+          <div className='fixed bottom-0 z-40 items-center justify-center hidden w-full md:h-[60px] bg-gradient-to-r from-indigo-700 via-purple-800 to-blue-800 md:flex'><Footer/> </div>
           </>
         {/* //   :<AuthDashboard/>
         //  }  */}
