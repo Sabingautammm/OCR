@@ -14,7 +14,7 @@ export const GoogleAuth = () => {
     
         if (code) {
             // Exchange code for token at your backend
-            axios.post('https://ocr.goodwish.com.np/api/auth/google/callback/', { code })
+            axios.post('https://05c5-103-163-182-1.ngrok-free.app/api/auth/google/callback/', { code })
                 .then(response => {
                     console.log(response.data);
                     const { token,photo,name,email} = response.data;  // Assuming the response contains a 'user' object
@@ -27,7 +27,7 @@ export const GoogleAuth = () => {
                     localStorage.setItem('photo',photo);  // Save photo
                  
                     navigate('/');
-                    window.location.reload(); 
+                    window.location.reload(); s
                 })
                 .catch(error => {
                     console.error('Error during Google auth:', error);

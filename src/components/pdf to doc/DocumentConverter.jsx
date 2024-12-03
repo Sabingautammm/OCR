@@ -24,21 +24,22 @@ const DocumentConverter = () => {
       setIsDialogOpen(true); // Show the login dialog if user is not logged in
       return;
     }
-
+  
     if (!pdfFile) {
       setError("Please upload a PDF file to convert.");
       return;
     }
-
+  
     setIsLoading(true);
     setConvertedFileUrl(null);
-
+    setError(""); // Reset any previous errors
+  
     try {
       const formData = new FormData();
       formData.append("file", pdfFile);
-
+  
       const response = await axios.post(
-        'https://ocr.goodwish.com.np/api/pdf-to-docx/', // Replace with actual PDF-to-DOC API endpoint
+        'http://192.168.1.83:8000/api/pdf-to-docx/', // Replace with actual PDF-to-DOC API endpoint
         formData,
         {
           headers: {
@@ -48,10 +49,10 @@ const DocumentConverter = () => {
           responseType: 'json' // Expecting JSON response
         }
       );
-
+  
       // Check if the response contains the document path
       if (response.data && response.data.document) {
-        const baseUrl = 'https://ocr.goodwish.com.np'; // Ensure this matches your server's base URL
+        const baseUrl = 'http://192.168.1.83:8000'; // Ensure this matches your server's base URL
         const fileUrl = `${baseUrl}${response.data.document}`; // Construct full URL
         setConvertedFileUrl(fileUrl);
       } else {
@@ -59,11 +60,17 @@ const DocumentConverter = () => {
       }
     } catch (error) {
       console.error("Conversion error:", error);
+      // Display the server's error message if available
+      if (error.response && error.response.data && error.response.data.error) {
+        setError(error.response.data.error);
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
   };
-
+  
   const handleCloseDialog = () => {
     setIsDialogOpen(false); // Close the login dialog
   };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { NavLink } from 'react-router-dom';
 import Signup from './LoginForm';
 import Login from './SignUpForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,10 +21,10 @@ const AuthDashboard = () => {
     // Google OAuth redirection URL setup
     const signInWithGoogle = () => {
         const CLIENT_ID = '152364471348-fngo0d6ejqtg13ldvq8ja9omf710ktuc.apps.googleusercontent.com';
-        const REDIRECT_URI = 'https://ocr.goodwish.com.np/google-auth-redirect/';
+        const REDIRECT_URI = 'http://localhost:5173/google-auth-redirect/';
         const SCOPE = 'openid profile email';
 
-        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth/` +
             `client_id=${CLIENT_ID}&` +
             `redirect_uri=${encodeURIComponent(REDIRECT_URI)}&` +
             `response_type=code&` +
@@ -63,6 +64,8 @@ const AuthDashboard = () => {
             <h1 className="mb-6 text-2xl font-bold text-center text-gray-800 sm:text-3xl md:text-4xl">
                 Welcome to The OCR
             </h1>
+
+        
     
             {/* Login/Signup Animation */}
             <AnimatePresence>
@@ -88,6 +91,17 @@ const AuthDashboard = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+             <NavLink to='/forgotPassword'>
+            <button className='justify-end mt-5 font-bold text-red-500'>
+                forgot password?
+            </button>
+            </NavLink>
+            {/* <aa
+            href="/forgotPassword"
+            className="text-sm font-bold text-blue-600 hover:underline"
+          >
+            Back to Login
+          </a> */}
     
             {/* Toggle and Social Login */}
             <div className="flex flex-col mt-6 text-center">

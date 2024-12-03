@@ -38,7 +38,7 @@ const OcrConverter = () => {
       formData.append("image", selectedImage);
 
       const response = await axios.post(
-        'https://ocr.goodwish.com.np/api/image-to-text/',
+        'http://192.168.1.83:8000/api/image-to-text/',
         formData,
         {
           headers: {

@@ -37,6 +37,23 @@ const Navbar = () => {
   }, []);
 
   const [login, setLogin] = useState(token);
+ 
+  let intervalId;
+
+  const handleMouseEnter = () => {
+    setIsLogoutToggle(true);
+    // Set an interval to toggle continuously every 1 second
+ // Toggle every 1 second
+  };
+  
+  const handleMouseLeave = () => {
+    clearInterval(intervalId); // Clear the interval when the mouse leaves
+    // Wait 3 seconds before resetting the toggle to false
+    setTimeout(() => {
+      setIsLogoutToggle(false);
+    }, 1000); // 3 seconds delay before turning off the toggle
+  };
+  
 
   return (
     <motion.nav
@@ -60,22 +77,35 @@ const Navbar = () => {
       
       {login ? (
  <div className="relative flex items-center gap-4">
- <div onClick={() => setIsLogoutToggle(!isLogoutToggle)} className="relative flex flex-col items-center cursor-pointer">
+ <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="relative flex flex-col items-center cursor-pointer"
+    >
+         <NavLink to="/profile">
    <img
      className="object-cover w-12 h-12 rounded-full"
-     src={photo.startsWith("http") ? photo : `https://ocr.goodwish.com.np${photo}` || "https://via.placeholder.com/40"}
+     src={photo.startsWith("http") ? photo : `http://192.168.1.83:8000${photo}` || "https://via.placeholder.com/40"}
      alt="User"
    />
+    </NavLink>
    <h4 className="text-sm text-gray-900">{name}</h4>
+  
    {isLogoutToggle && (
-     <div ref={logoutRef} className="absolute z-10 w-32 p-2 mt-2 text-center text-gray-800 bg-white rounded-md shadow-lg top-full">
-       <button
-         onClick={logOut}
-         className="w-full py-2 font-semibold text-gray-700 rounded-md hover:bg-gray-200"
-       >
-         Logout
-       </button>
-     </div>
+   <div
+   ref={logoutRef}
+   className="absolute z-10 w-20 p-2 mt-2 text-center text-gray-200 bg-purple-800 rounded-lg shadow-md top-full"
+ >
+
+     <button
+     onClick={logOut}
+       className="w-full py-0 text-sm font-semibold text-gray-200 transition-all duration-200 rounded-md hover:bg-blue-600 hover:text-white"
+     >
+       Log Out
+     </button>
+  
+ </div>
+ 
    )}
  </div>
 

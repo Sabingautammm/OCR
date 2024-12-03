@@ -56,8 +56,8 @@ const TableExtension = () => {
     try {
       const response = await axios.post(
         isPdf
-          ? 'https://ocr.goodwish.com.np/api/pdf-table-extraction/'
-          : 'https://ocr.goodwish.com.np/api/images/',
+          ? 'http://192.168.1.83:8000/api/pdf-table-extraction/'
+          : 'http://192.168.1.83:8000/api/images/',
         formData,
         {
           headers: {

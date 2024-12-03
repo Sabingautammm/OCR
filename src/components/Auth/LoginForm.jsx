@@ -41,13 +41,15 @@ const LoginForm = () => {
     if (validate()) {
       setIsLoading(true);
       try {
-        const response = await axios.post('https://ocr.goodwish.com.np/api/login/', formData);
+        const response = await axios.post('http://192.168.1.83:8000/api/login/', formData);
         console.log("Login successful:", response.data);
         if (response.status=202) {
           localStorage.setItem('token', response.data.token)
           localStorage.setItem('name', response.data.first_name)
           localStorage.setItem('email', response.data.email)
           localStorage.setItem('photo', response.data.photo)
+          localStorage.setItem('password',response.data.password)
+          localStorage.setItem('number',response.data.contact)
           window.location.reload()
 
         }

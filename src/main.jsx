@@ -12,6 +12,9 @@ import OcrConverter from './components/OCR/OcrConverter.jsx';
 import Reader from './components/READER/Reader.jsx';
 import AuthDashboard from './components/Auth/AuthDashboard.jsx';
 import GoogleAuth from './components/Auth/GoogleAuth.jsx';
+import Profile from './components/Profile.jsx';
+import ForgetPassword from './components/Auth/ForgetPassword.jsx';
+import ChangePassword from './components/Auth/ChangePassword.jsx';
 
 function Main() {
   const token = localStorage.getItem('token');
@@ -29,11 +32,18 @@ function Main() {
         { path: '/img-to-doc', element: <ImgDocConverter /> },
         { path: '/ocr', element: <OcrConverter /> },
         { path: '/reader', element: <Reader /> },
+        { path: '/forgotPassword', element: <ForgetPassword /> },
+        { path: '/changePassword', element: <ChangePassword /> },
+      
+      
         {
           path: '/auth',
           element: login ? <HomePage /> : <AuthDashboard />,
         },
         { path: '/google-auth-redirect', element: <GoogleAuth /> },
+        { path: '/profile',
+           element: login ?  <Profile />:<HomePage />},
+
       ],
     },
   ]);

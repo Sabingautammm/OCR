@@ -91,7 +91,7 @@ const SignUpForm = ({ setIsLogin }) => {
       });
 
       try {
-        const response = await axios.post('https://ocr.goodwish.com.np/api/users/', payload, {
+        const response = await axios.post('http://192.168.1.83:8000/api/users/', payload, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 

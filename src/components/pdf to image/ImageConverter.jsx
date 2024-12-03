@@ -41,7 +41,7 @@ const ImageConverter = () => {
       const formData = new FormData();
       formData.append('file', pdfFile);
 
-      const response = await fetch('https://ocr.goodwish.com.np/api/files/', {
+      const response = await fetch('http://192.168.1.83:8000/api/files/', {
         method: 'POST',
         body: formData,
         headers: {
@@ -58,7 +58,7 @@ const ImageConverter = () => {
         return;
       }
 
-      const baseUrl = 'https://ocr.goodwish.com.np/'; // Replace with your server base URL
+      const baseUrl = 'http://192.168.1.83:8000/'; // Replace with your server base URL
       const imageUrls = data.file.pages.map((page) => `${baseUrl}${page.image}`);
       setConvertedImages(imageUrls);
     } catch (error) {
