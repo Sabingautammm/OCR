@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
+import store from './components/History/state/store.jsx'; // Import the Redux store
 import './index.css';
 import App from './App.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -15,6 +17,8 @@ import GoogleAuth from './components/Auth/GoogleAuth.jsx';
 import Profile from './components/Profile.jsx';
 import ForgetPassword from './components/Auth/ForgetPassword.jsx';
 import ChangePassword from './components/Auth/ChangePassword.jsx';
+import DeleteAccount from './components/DeleteAccount.jsx';
+import HistoryMainPage from './components/History/HistoryMainPage.jsx';
 
 function Main() {
   const token = localStorage.getItem('token');
@@ -31,19 +35,20 @@ function Main() {
         { path: '/pdf-to-img', element: <ImageConverter /> },
         { path: '/img-to-doc', element: <ImgDocConverter /> },
         { path: '/ocr', element: <OcrConverter /> },
+        { path: '/history', element: <HistoryMainPage /> },
         { path: '/reader', element: <Reader /> },
         { path: '/forgotPassword', element: <ForgetPassword /> },
         { path: '/changePassword', element: <ChangePassword /> },
-      
-      
+        {
+          path: '/deleteAccount',
+          element: login ? <DeleteAccount /> : <HomePage />,
+        },
         {
           path: '/auth',
           element: login ? <HomePage /> : <AuthDashboard />,
         },
         { path: '/google-auth-redirect', element: <GoogleAuth /> },
-        { path: '/profile',
-           element: login ?  <Profile />:<HomePage />},
-
+        { path: '/profile', element: login ? <Profile /> : <HomePage /> },
       ],
     },
   ]);
@@ -53,6 +58,8 @@ function Main() {
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Main />
-  </React.StrictMode>,
+    <Provider store={store}>
+      <Main />
+    </Provider>
+  </React.StrictMode>
 );

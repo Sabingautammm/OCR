@@ -19,10 +19,10 @@ const LoginForm = () => {
     const newErrors = {};
 
     if (!formData.username) {
-      newErrors.username = 'username is required';
+      newErrors.username = 'Username is required';
       isValid = false;
     } else if ('') {
-      newErrors.username = 'username address is invalid';
+      newErrors.username = 'Username address is invalid';
       isValid = false;
     }
 
@@ -41,21 +41,23 @@ const LoginForm = () => {
     if (validate()) {
       setIsLoading(true);
       try {
-        const response = await axios.post('http://192.168.1.83:8000/api/login/', formData);
+        const response = await axios.post('http://192.168.1.34:8000/api/login/', formData);
         console.log("Login successful:", response.data);
         if (response.status=202) {
           localStorage.setItem('token', response.data.token)
-          localStorage.setItem('name', response.data.first_name)
+          localStorage.setItem('firstname', response.data.first_name)
+          localStorage.setItem('lastname', response.data.last_name)
           localStorage.setItem('email', response.data.email)
           localStorage.setItem('photo', response.data.photo)
           localStorage.setItem('password',response.data.password)
           localStorage.setItem('number',response.data.contact)
+          localStorage.setItem('username',response.data.username)
           window.location.reload()
 
         }
         // Redirect or perform further actions here
       } catch (error) {
-        setLoginError("Login failed. Please check your credentials and try again. or make sure to check gmail for verification");
+        setLoginError("Login failed. Please check your credentials and try again or make sure to check gmail for verification");
         console.error("Login error:", error);
       } finally {
         setIsLoading(false);
@@ -67,7 +69,7 @@ const LoginForm = () => {
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
       <TextField
         fullWidth
-        label="username"
+        label="Username"
         variant="outlined"
         margin="normal"
         name="username"

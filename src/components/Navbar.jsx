@@ -11,9 +11,13 @@ const Navbar = () => {
 
   const token = localStorage.getItem('token');
   const email = localStorage.getItem('email');
-  const name = localStorage.getItem('name');
+  const firstname = localStorage.getItem('firstname');
+  const lastname = localStorage.getItem('lastname');
+  const username = localStorage.getItem('username');
   const photo = localStorage.getItem('photo') || ''; // Default to empty string if no photo
   
+
+
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
@@ -85,11 +89,11 @@ const Navbar = () => {
          <NavLink to="/profile">
    <img
      className="object-cover w-12 h-12 rounded-full"
-     src={photo.startsWith("http") ? photo : `http://192.168.1.83:8000${photo}` || "https://via.placeholder.com/40"}
+     src={photo.startsWith("http") ? photo : `http://192.168.1.34:8000${photo}` || "https://via.placeholder.com/40"}
      alt="User"
    />
     </NavLink>
-   <h4 className="text-sm text-gray-900">{name}</h4>
+   <h4 className="text-sm text-gray-900">{username}</h4>
   
    {isLogoutToggle && (
    <div

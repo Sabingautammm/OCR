@@ -39,7 +39,7 @@ const DocumentConverter = () => {
       formData.append("file", pdfFile);
   
       const response = await axios.post(
-        'http://192.168.1.83:8000/api/pdf-to-docx/', // Replace with actual PDF-to-DOC API endpoint
+        'http://192.168.1.34:8000/api/pdf-to-docx/', // Replace with actual PDF-to-DOC API endpoint
         formData,
         {
           headers: {
@@ -52,7 +52,7 @@ const DocumentConverter = () => {
   
       // Check if the response contains the document path
       if (response.data && response.data.document) {
-        const baseUrl = 'http://192.168.1.83:8000'; // Ensure this matches your server's base URL
+        const baseUrl = 'http://192.168.1.34:8000'; // Ensure this matches your server's base URL
         const fileUrl = `${baseUrl}${response.data.document}`; // Construct full URL
         setConvertedFileUrl(fileUrl);
       } else {
