@@ -17,35 +17,40 @@ export default function ForgetPassword() {
     setLoading(true);
     setError('');
     setSuccess('');
-
+  
+    console.log('Email being sent:', email); // Debug input email
+  
     try {
-      const response = await fetch('http://localhost:8000/api/forgot-password/', {
+      const response = await fetch('http://192.168.1.34:8000/api/forgot-password/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email }),
       });
-
+  
       const data = await response.json();
-
+      console.log('Response from server:', data); // Debug response
+  
       if (response.ok) {
         setSuccess('OTP has been sent to your email.');
         setTimeout(() => {
-          navigate('/changePassword', { state: { email } }); // Pass email to change password page
+          navigate('/changePassword', { state: { email } });
         }, 2000);
       } else {
         setError(data.message || 'Email not found.');
       }
     } catch (err) {
+      console.error('Error:', err); // Debug fetch error
       setError('Something went wrong. Please try again later.');
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-200 to-blue-400">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 via-slate-400 to-indigo-600">
       <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-2xl">
         <h1 className="mb-6 text-4xl font-extrabold text-center text-blue-700">
           Forgot Password

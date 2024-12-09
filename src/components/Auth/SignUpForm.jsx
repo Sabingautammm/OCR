@@ -54,7 +54,7 @@ const SignUpForm = ({ setIsLogin }) => {
       isValid = false;
     }
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = 'Passwords did not match';
       isValid = false;
     }
     if (!formData.first_name) {
@@ -91,7 +91,7 @@ const SignUpForm = ({ setIsLogin }) => {
       });
 
       try {
-        const response = await axios.post('http://192.168.1.83:8000/api/users/', payload, {
+        const response = await axios.post('http://192.168.1.34:8000/api/users/', payload, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 

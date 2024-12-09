@@ -1,8 +1,11 @@
 import React,{useState} from 'react'
 import { FaFileAlt, FaHome, FaImage, FaTable } from 'react-icons/fa'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faLock } from '@fortawesome/free-solid-svg-icons'; 
 import { faVolumeUp } from '@fortawesome/free-solid-svg-icons';
+import { faHistory } from '@fortawesome/free-solid-svg-icons';
+
 import { NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion';
 const Footer = () => {
@@ -139,7 +142,15 @@ const Footer = () => {
                 </div>
               </motion.div>
             </NavLink> */}
-            
+                <NavLink to="/history"  className="nav-link md:text-white">
+              <motion.div
+                whileHover={{ scale: 1.2, color: '#FFD700' }}
+                className="flex items-center px-4 py-3 space-x-2 transition duration-200 rounded-md md:text-xl hover:bg-indigo-600 md:hover:bg-transparent"
+              >
+                <FontAwesomeIcon icon={faHistory} />
+                <span>History</span>
+              </motion.div>
+            </NavLink>
             {showTooltip && (
         <div className="absolute z-10 px-2 py-1 -mt-10 text-sm text-white bg-gray-700 rounded">
           You need to purchase premium to use this!

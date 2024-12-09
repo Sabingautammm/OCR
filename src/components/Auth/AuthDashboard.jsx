@@ -48,7 +48,7 @@ const AuthDashboard = () => {
                     navigate('/dashboard');  // Redirect to dashboard or any protected route
                 })
                 .catch(error => {
-                    console.error("Google OAuth error:", error);
+                    console.error("Google Auth error:", error);
                 });
         }
     }, [location.search, navigate]);
@@ -93,7 +93,7 @@ const AuthDashboard = () => {
             </AnimatePresence>
              <NavLink to='/forgotPassword'>
             <button className='justify-end mt-5 font-bold text-red-500'>
-                forgot password?
+                Forgot Password?
             </button>
             </NavLink>
             {/* <aa
@@ -109,7 +109,7 @@ const AuthDashboard = () => {
                     onClick={() => setShowLogin(!showLogin)}
                     className="font-semibold text-blue-600 underline transition-colors hover:text-blue-400"
                 >
-                    {showLogin ? "Already have an account? Log In" : "Don't have an account? Sign Up"}
+                    {showLogin ? "I already have an account" : "Don't have an account? "}
                 </button>
     
              

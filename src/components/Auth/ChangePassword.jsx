@@ -18,7 +18,7 @@ export default function ChangePassword() {
     setSuccess('');
 
     try {
-      const response = await fetch('http://localhost:8000/api/change-password/', {
+      const response = await fetch('http://192.168.1.34:8000/api/change-password/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

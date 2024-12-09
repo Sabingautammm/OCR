@@ -20,7 +20,7 @@ const OcrConverter = () => {
   };
 
   const handleConvert = async () => {
-    if (!login) {
+    if (login) {
       setIsDialogOpen(true); // Show the dialog if user is not logged in
       return;
     }
@@ -38,11 +38,11 @@ const OcrConverter = () => {
       formData.append("image", selectedImage);
 
       const response = await axios.post(
-        'http://192.168.1.83:8000/api/image-to-text/',
+        'http://192.168.1.34:8000/api/image-to-text/',
         formData,
         {
           headers: {
-            'Authorization': `Token ${token}`,
+            // 'Authorization': `Token ${token}`,
             'Content-Type': 'multipart/form-data',
           },
         }
