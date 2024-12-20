@@ -89,7 +89,7 @@ const Navbar = () => {
          <NavLink to="/profile">
    <img
      className="object-cover w-12 h-12 rounded-full"
-     src={photo.startsWith("http") ? photo : `http://192.168.1.34:8000${photo}` || "https://via.placeholder.com/40"}
+     src={photo.startsWith("http") ? photo : `https://ocr.goodwish.com.np${photo}` || "https://via.placeholder.com/40"}
      alt="User"
    />
     </NavLink>

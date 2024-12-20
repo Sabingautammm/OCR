@@ -21,7 +21,7 @@ const AuthDashboard = () => {
     // Google OAuth redirection URL setup
     const signInWithGoogle = () => {
         const CLIENT_ID = '152364471348-fngo0d6ejqtg13ldvq8ja9omf710ktuc.apps.googleusercontent.com';
-        const REDIRECT_URI = 'http://localhost:5173/google-auth-redirect/';
+        const REDIRECT_URI = 'http://localhost:4000s/google-auth-redirect/';
         const SCOPE = 'openid profile email';
 
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth/` +

@@ -39,7 +39,7 @@ const DocumentConverter = () => {
       formData.append("file", pdfFile);
   
       const response = await axios.post(
-        'http://192.168.1.34:8000/api/pdf-to-docx/', // Replace with actual PDF-to-DOC API endpoint
+        'https://ocr.goodwish.com.np/api/pdf-to-docx/', // Replace with actual PDF-to-DOC API endpoint
         formData,
         {
           headers: {
@@ -52,7 +52,7 @@ const DocumentConverter = () => {
   
       // Check if the response contains the document path
       if (response.data && response.data.document) {
-        const baseUrl = 'http://192.168.1.34:8000'; // Ensure this matches your server's base URL
+        const baseUrl = 'https://ocr.goodwish.com.np'; // Ensure this matches your server's base URL
         const fileUrl = `${baseUrl}${response.data.document}`; // Construct full URL
         setConvertedFileUrl(fileUrl);
       } else {
@@ -90,6 +90,11 @@ const DocumentConverter = () => {
           <input type="file" hidden onChange={handleFileChange} accept="application/pdf" />
         </Button>
       </Box>
+      <div className="flex items-center justify-center">
+  <p className="font-bold text-lg text-gray-700 mr-2">Note:</p>
+  <h3 className="font-semibold text-green-600 text-md my-2">Upload a PDF with less than 3 pages</h3>
+</div>
+
 
       {pdfFile && (
         <Typography variant="subtitle2" sx={{ mb: 1 }}>

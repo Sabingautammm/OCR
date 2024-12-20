@@ -41,7 +41,7 @@ const ImageConverter = () => {
       const formData = new FormData();
       formData.append('file', pdfFile);
 
-      const response = await fetch('http://192.168.1.34:8000/api/files/', {
+      const response = await fetch('https://ocr.goodwish.com.np/api/files/', {
         method: 'POST',
         body: formData,
         headers: {
@@ -58,7 +58,7 @@ const ImageConverter = () => {
         return;
       }
 
-      const baseUrl = 'http://192.168.1.34:8000/'; // Replace with your server base URL
+      const baseUrl = 'https://ocr.goodwish.com.np/'; // Replace with your server base URL
       const imageUrls = data.file.pages.map((page) => `${baseUrl}${page.image}`);
       setConvertedImages(imageUrls);
     } catch (error) {
@@ -120,6 +120,10 @@ const ImageConverter = () => {
           <input type="file" hidden onChange={handleFileChange} accept="application/pdf" />
         </Button>
       </Box>
+      <div className="flex items-center justify-center">
+  <p className="font-bold text-lg text-gray-700 mr-2">Note:</p>
+  <h3 className="font-semibold text-green-600 text-md my-2">Upload a PDF with less than 3 pages</h3>
+</div>
 
       {pdfFile && (
         <Typography variant="subtitle2" sx={{ mb: 1 }}>

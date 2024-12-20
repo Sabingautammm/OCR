@@ -69,7 +69,7 @@ export default function Profile() {
   
     try {
       const response = await axios.put(
-        "http://192.168.1.34:8000/api/users/update-profile/",
+        "https://ocr.goodwish.com.np/api/users/update-profile/",
         formData,
         {
           headers: {
@@ -87,7 +87,7 @@ export default function Profile() {
         localStorage.setItem("lastname", userData.lastname);
         localStorage.setItem("number", userData.number);
         if (response.data.photo) {
-          localStorage.setItem("photo", `http://192.168.1.34:8000${response.data.photo}`);
+          localStorage.setItem("photo", `https://ocr.goodwish.com.np${response.data.photo}`);
         }
   
         window.location.reload();
@@ -121,7 +121,7 @@ export default function Profile() {
 
     try {
       const response = await axios.put(
-        "http://192.168.1.34:8000/api/users/update-profile/",
+        "https://ocr.goodwish.com.np/api/users/update-profile/",
         passwordData,
         {
           headers: {
@@ -173,7 +173,7 @@ export default function Profile() {
               typeof userData.photo === "string"
                 ? userData.photo.startsWith("http")
                   ? userData.photo
-                  : `http://192.168.1.34:8000/${userData.photo.replace(/^\//, "")}`
+                  : `https://ocr.goodwish.com.np/${userData.photo.replace(/^\//, "")}`
                 : userData.photo instanceof File
                 ? URL.createObjectURL(userData.photo)
                 : "https://via.placeholder.com/40"

@@ -21,7 +21,7 @@ export default function ForgetPassword() {
     console.log('Email being sent:', email); // Debug input email
   
     try {
-      const response = await fetch('http://192.168.1.34:8000/api/forgot-password/', {
+      const response = await fetch('https://ocr.goodwish.com.np/api/forgot-password/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
