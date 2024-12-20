@@ -91,13 +91,13 @@ const SignUpForm = ({ setIsLogin }) => {
       });
 
       try {
-        const response = await axios.post('http://192.168.1.34:8000/api/users/', payload, {
+        const response = await axios.post('https://ocr.goodwish.com.np/api/users/', payload, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 
         // Set success message instead of alert
         setSuccessMessage("User signed up successfully, please check your email to confirm.");
-
+       
         // Optionally, you can reload or redirect after successful sign-up
         window.location.reload();
       } catch (error) {

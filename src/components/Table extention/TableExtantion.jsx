@@ -56,8 +56,8 @@ const TableExtension = () => {
     try {
       const response = await axios.post(
         isPdf
-          ? 'http://192.168.1.34:8000/api/pdf-table-extraction/'
-          : 'http://192.168.1.34:8000/api/images/',
+          ? 'https://ocr.goodwish.com.np/api/pdf-table-extraction/'
+          : 'https://ocr.goodwish.com.np/api/images/',
         formData,
         {
           headers: {
@@ -111,7 +111,10 @@ const TableExtension = () => {
           />
         </Button>
       </Box>
-
+      <div className="flex items-center justify-center">
+  <p className="font-bold text-lg text-gray-700 mr-2">Note:</p>
+  <h3 className="font-semibold text-green-600 text-md my-2">Upload a PDF with less than 3 pages</h3>
+</div>
       {selectedFile && (
         <Typography variant="subtitle2" sx={{ mb: 1 }}>
           Selected File: {selectedFile.name}

@@ -7,6 +7,7 @@ export default function ChangePassword() {
   const email = location.state?.email || '';
   const [otp, setOtp] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); // New state for confirm password
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,8 +18,15 @@ export default function ChangePassword() {
     setError('');
     setSuccess('');
 
+    // Check if the password and confirm password match
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch('http://192.168.1.34:8000/api/change-password/', {
+      const response = await fetch('https://ocr.goodwish.com.np/api/change-password/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,6 +88,23 @@ export default function ChangePassword() {
               placeholder="Enter new password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="block mb-2 text-sm font-semibold text-gray-600"
+            >
+              Re-enter New Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Re-enter new password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full px-4 py-3 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />

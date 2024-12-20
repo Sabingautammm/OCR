@@ -37,7 +37,7 @@ export default function DeleteAccount() {
       setIsLoading(true);
       try {
         const response = await axios.delete(
-          'http://192.168.1.34:8000/api/users/delete-account/',
+          'https://ocr.goodwish.com.np/api/users/delete-account/',
           {
             headers: {
               Authorization: `Token ${token}`,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { showAlert } from "../AlertLoader";
@@ -17,11 +17,12 @@ export const HistoryMainPage = () => {
     const [previews, setPreviews] = useState({});
     const [pdfModalOpen, setPdfModalOpen] = useState(false);
     const [currentPdfUrl, setCurrentPdfUrl] = useState(null);
+    const pdfModalRef = useRef(null); // Ref for the modal container
 
     useEffect(() => {
         const fetchAllHistories = async () => {
             try {
-                const responses = await Promise.all([ 
+                const responses = await Promise.all([
                     axios.get(`${baseUrl}api/scanned-files/`, { headers: { Authorization: `Token ${token}` } }),
                     axios.get(`${baseUrl}api/images/`, { headers: { Authorization: `Token ${token}` } }),
                     axios.get(`${baseUrl}api/convert-doc/`, { headers: { Authorization: `Token ${token}` } }),
@@ -33,7 +34,7 @@ export const HistoryMainPage = () => {
                         input: item.file || item.image || "Unknown",
                         output: item.document || item.file || "Unknown",
                         date: moment(item.created).format("YYYY-MM-DD HH:mm") || "Unknown",
-                        feature: ["PDF Conversion", "Table Extraction", "Document Analysis", "Image Conversion"][index],
+                        feature: ["PDF Conversion", "Table Extraction", "pdf or img to doc", "pdf to image"][index],
                         id: item.id,
                     }))
                 );
@@ -74,6 +75,23 @@ export const HistoryMainPage = () => {
         fetchAllHistories();
     }, [baseUrl, token]);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (pdfModalRef.current && !pdfModalRef.current.contains(event.target)) {
+                setPdfModalOpen(false);
+                setCurrentPdfUrl(null);
+            }
+        };
+
+        if (pdfModalOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [pdfModalOpen]);
+
     const generatePdfPreview = async (url, callback) => {
         try {
             const pdf = await pdfjsLib.getDocument({ url }).promise;
@@ -91,37 +109,34 @@ export const HistoryMainPage = () => {
             const image = canvas.toDataURL("image/png");
             callback(image);
         } catch (error) {
-            // console.error("Error generating PDF preview:", error);
             callback(null);
         }
     };
 
     const handleDelete = async (id, feature) => {
         let deleteUrl = "";
-        
         switch (feature) {
             case "PDF Conversion":
-                deleteUrl = `${baseUrl}api/convert-doc/${id}/`; 
+                deleteUrl = `${baseUrl}api/convert-doc/${id}/`;
                 break;
             case "Table Extraction":
-                deleteUrl = `${baseUrl}api/scanned-files/${id}/`; 
+                deleteUrl = `${baseUrl}api/scanned-files/${id}/`;
                 break;
             case "Document Analysis":
-                deleteUrl = `${baseUrl}api/files/${id}/`; 
+                deleteUrl = `${baseUrl}api/files/${id}/`;
                 break;
             case "Image Conversion":
-                deleteUrl = `${baseUrl}api/images/${id}/`; 
+                deleteUrl = `${baseUrl}api/images/${id}/`;
                 break;
             default:
-                console.log("Feature type not recognized for deletion");
                 return;
         }
-    
-        console.log("Deleting from URL:", deleteUrl); // Debugging log
-    
         try {
-            await axios.delete(deleteUrl, { headers: { Authorization: `Token ${token}` } });
-            setHistoryData((prevHistory) => prevHistory.filter(item => item.id !== id));
+            await axios.delete(deleteUrl, {
+                headers: { Authorization: `Token ${token}` },
+                ReferrerPolicy: 'no-referrer' 
+            });
+            setHistoryData((prevHistory) => prevHistory.filter((item) => item.id !== id));  // Improved state update
             showAlert("Item deleted successfully.", "green");
         } catch (error) {
             console.error("Error deleting item:", error);
@@ -129,25 +144,53 @@ export const HistoryMainPage = () => {
         }
     };
     
-    
-    
-
-    const handleDownload = (fileUrl) => {
-        console.log("Downloading file:", fileUrl);  // Check if the function is called
-        if (fileUrl) {
-            const link = document.createElement('a');
-            const fileName = fileUrl.split("/").pop();
-            link.href = fileUrl;
-            link.download = fileName;
-            link.click();
-        } else {
+    const handleDownload = async (fileUrl) => {
+        if (!fileUrl) {
             showAlert("File not available for download.", "red");
+            return;
+        }
+    
+        try {
+            // Fetch the file
+            const response = await axios.get(fileUrl, {
+                responseType: "blob", // Ensures the file is downloaded as a binary blob
+                headers: { Authorization: `Token ${token}` },
+                "Referrer-Policy": "no-referrer",
+            });
+    
+            // Extract filename from Content-Disposition or the URL
+            const contentDisposition = response.headers["content-disposition"];
+            let fileName = "downloaded-file";
+            if (contentDisposition && contentDisposition.includes("filename=")) {
+                fileName = contentDisposition
+                    .split("filename=")[1]
+                    .split(";")[0]
+                    .replace(/"/g, "");
+            } else {
+                fileName = fileUrl.split("/").pop();
+            }
+    
+            // Create a download link
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", fileName); // Set the download attribute with the filename
+            document.body.appendChild(link);
+            link.click();
+    
+            // Clean up
+            link.remove();
+            window.URL.revokeObjectURL(url);
+            showAlert("File downloaded successfully.", "green");
+        } catch (error) {
+            console.error("Error downloading file:", error);
+            showAlert("Failed to download file. Please try again later.", "red");
         }
     };
     
     
 
-    const renderPreview = (url, preview, id) => {
+    const renderPreview = (url, preview) => {
         const isImage = /\.(jpeg|jpg|png|gif|webp)$/i.test(url);
         const isPDF = /\.pdf$/i.test(url);
 
@@ -181,11 +224,6 @@ export const HistoryMainPage = () => {
         );
     };
 
-    const closePdfModal = () => {
-        setPdfModalOpen(false);
-        setCurrentPdfUrl(null);
-    };
-
     return (
         <div className="min-h-screen p-4 bg-gray-100">
             <div className="w-full p-6 mx-auto bg-white rounded-md shadow-lg md:w-4/5 lg:w-3/4 xl:w-2/3">
@@ -206,13 +244,13 @@ export const HistoryMainPage = () => {
                                 historyData.map((item) => (
                                     <tr key={item.id} className="transition-all border-t border-gray-300 hover:bg-gray-50">
                                         <td className="p-3 text-sm">{item.feature}</td>
-                                        <td className="p-3">{renderPreview(item.input, previews[item.id]?.input, item.id)}</td>
-                                        <td className="p-3">{renderPreview(item.output, previews[item.id]?.output, item.id)}</td>
+                                        <td className="p-3">{renderPreview(item.input, previews[item.id]?.input)}</td>
+                                        <td className="p-3">{renderPreview(item.output, previews[item.id]?.output)}</td>
                                         <td className="p-3 text-sm">{item.date}</td>
                                         <td className="p-3">
                                             <div className="flex items-center space-x-3">
                                                 <button
-                                                   onClick={() => handleDelete(item.id, item.feature)}
+                                                    onClick={() => handleDelete(item.id, item.feature)}
                                                     className="px-3 py-1 text-sm text-white transition bg-red-600 rounded-md hover:bg-red-700"
                                                 >
                                                     Delete
@@ -241,8 +279,8 @@ export const HistoryMainPage = () => {
 
             {pdfModalOpen && currentPdfUrl && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="max-w-4xl max-h-full p-6 overflow-auto bg-white rounded-lg shadow-lg">
-                        <button onClick={closePdfModal} className="absolute font-bold text-red-600 top-2 right-2">X</button>
+                    <div ref={pdfModalRef} className="max-w-4xl max-h-full p-6 overflow-auto bg-white rounded-lg shadow-lg">
+                        <button onClick={() => setPdfModalOpen(false)} className="absolute font-bold text-red-600 top-2 right-2">X</button>
                         <iframe
                             src={currentPdfUrl}
                             title="PDF Preview"
